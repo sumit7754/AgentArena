@@ -186,22 +186,22 @@ graph TD
 
 ### Technology Stack
 
-| Layer | Technology | Purpose | Version |
-|-------|------------|---------|---------|
-| **Frontend** | React 18+ | User Interface | 18.2+ |
-| **Build Tool** | Vite | Fast Development | 4.0+ |
-| **Styling** | TailwindCSS | Utility-First CSS | 3.3+ |
-| **State Management** | Redux Toolkit | Predictable State | 1.9+ |
-| **API Client** | React Query | Server State | 4.0+ |
-| **Backend Framework** | FastAPI | Async Python API | 0.104+ |
-| **Database ORM** | SQLAlchemy 2.0 | Async Database ORM | 2.0+ |
-| **Database** | PostgreSQL | Primary Database | 15+ |
-| **Cache** | Redis | In-Memory Cache | 7.0+ |
-| **Authentication** | JWT + bcrypt | Secure Auth | - |
-| **Validation** | Pydantic v2 | Data Validation | 2.0+ |
-| **Testing** | pytest + httpx | Async Testing | - |
-| **Containerization** | Docker | Environment Isolation | 24+ |
-| **Orchestration** | Docker Compose | Multi-Container | 2.20+ |
+| Layer                 | Technology     | Purpose               | Version |
+| --------------------- | -------------- | --------------------- | ------- |
+| **Frontend**          | React 18+      | User Interface        | 18.2+   |
+| **Build Tool**        | Vite           | Fast Development      | 4.0+    |
+| **Styling**           | TailwindCSS    | Utility-First CSS     | 3.3+    |
+| **State Management**  | Redux Toolkit  | Predictable State     | 1.9+    |
+| **API Client**        | React Query    | Server State          | 4.0+    |
+| **Backend Framework** | FastAPI        | Async Python API      | 0.104+  |
+| **Database ORM**      | SQLAlchemy 2.0 | Async Database ORM    | 2.0+    |
+| **Database**          | PostgreSQL     | Primary Database      | 15+     |
+| **Cache**             | Redis          | In-Memory Cache       | 7.0+    |
+| **Authentication**    | JWT + bcrypt   | Secure Auth           | -       |
+| **Validation**        | Pydantic v2    | Data Validation       | 2.0+    |
+| **Testing**           | pytest + httpx | Async Testing         | -       |
+| **Containerization**  | Docker         | Environment Isolation | 24+     |
+| **Orchestration**     | Docker Compose | Multi-Container       | 2.20+   |
 
 ---
 
@@ -289,45 +289,36 @@ sequenceDiagram
     Client->>API: POST /api/v1/submissions
     API->>Controller: create_submission()
     Controller->>Service: create_submission()
-    
     Service->>Factory: get_playground_service()
     Factory->>RealPG: create_instance()
-    
     Service->>RealPG: execute_playground_run()
-    
     RealPG->>Env: create_environment()
     Env-->>RealPG: environment_config
-    
     RealPG->>Agent: initialize(llm_client, config, task)
     Agent-->>RealPG: initialized_agent
-    
     RealPG->>Browser: WebBrowserAutomation(env)
     Browser-->>RealPG: browser_instance
-    
+
     loop Execution Loop
         RealPG->>Browser: get_page_content()
         Browser-->>RealPG: observation
-        
         RealPG->>Agent: decide_action(observation)
         Agent->>LLM: generate_response()
-        LLM-->>Agent: action_decision
-        Agent-->>RealPG: parsed_action
-        
+        LLM-->>Agent: response
+        Agent-->>RealPG: action
         RealPG->>Browser: execute_action(action)
-        Browser-->>RealPG: action_result
-        
+        Browser-->>RealPG: result
         RealPG->>RealPG: check_completion_criteria()
-        
+
         alt Task Complete
-            break Exit Loop
+            break
         end
-        
+
         RealPG->>Client: progress_update (WebSocket)
     end
-    
+
     RealPG->>Browser: close()
     RealPG->>Agent: reset()
-    
     RealPG-->>Service: PlaygroundRunOutput
     Service-->>Controller: SubmissionResponse
     Controller-->>API: JSON Response
@@ -390,7 +381,7 @@ erDiagram
         uuid task_id FK
         enum status
         float score
-        integer steps_taken
+        int steps_taken
         float execution_time
         json execution_log
         json result_data
@@ -414,7 +405,7 @@ erDiagram
         uuid submission_id FK
         uuid task_id FK
         float score
-        integer rank
+        int rank
         datetime achieved_at
     }
 ```
@@ -423,14 +414,14 @@ erDiagram
 
 #### Core Tables
 
-| Table | Purpose | Key Features |
-|-------|---------|--------------|
-| **users** | User management | UUID primary keys, bcrypt passwords, role-based access |
-| **agents** | Agent definitions | JSON configuration, performance tracking |
-| **tasks** | Evaluation tasks | Environment configs, difficulty levels |
-| **submissions** | Execution records | Complete execution state, logs, results |
-| **evaluation_results** | Detailed metrics | Performance analytics, scoring data |
-| **leaderboard** | Rankings | Global and task-specific rankings |
+| Table                  | Purpose           | Key Features                                           |
+| ---------------------- | ----------------- | ------------------------------------------------------ |
+| **users**              | User management   | UUID primary keys, bcrypt passwords, role-based access |
+| **agents**             | Agent definitions | JSON configuration, performance tracking               |
+| **tasks**              | Evaluation tasks  | Environment configs, difficulty levels                 |
+| **submissions**        | Execution records | Complete execution state, logs, results                |
+| **evaluation_results** | Detailed metrics  | Performance analytics, scoring data                    |
+| **leaderboard**        | Rankings          | Global and task-specific rankings                      |
 
 #### Indexing Strategy
 
@@ -569,19 +560,19 @@ graph TB
 
 #### HTTP Status Code Strategy
 
-| Status Code | Usage | Example |
-|-------------|-------|---------|
-| **200 OK** | Successful GET, PUT | Retrieve agent, update task |
-| **201 Created** | Successful POST | Create agent, submit task |
-| **204 No Content** | Successful DELETE | Delete agent |
-| **400 Bad Request** | Client error | Invalid input data |
-| **401 Unauthorized** | Authentication required | Missing/invalid token |
-| **403 Forbidden** | Authorization failed | Insufficient permissions |
-| **404 Not Found** | Resource not found | Agent/task doesn't exist |
-| **409 Conflict** | Resource conflict | Duplicate agent name |
-| **422 Unprocessable Entity** | Validation error | Invalid data format |
-| **429 Too Many Requests** | Rate limit exceeded | API rate limiting |
-| **500 Internal Server Error** | Server error | Unexpected server error |
+| Status Code                   | Usage                   | Example                     |
+| ----------------------------- | ----------------------- | --------------------------- |
+| **200 OK**                    | Successful GET, PUT     | Retrieve agent, update task |
+| **201 Created**               | Successful POST         | Create agent, submit task   |
+| **204 No Content**            | Successful DELETE       | Delete agent                |
+| **400 Bad Request**           | Client error            | Invalid input data          |
+| **401 Unauthorized**          | Authentication required | Missing/invalid token       |
+| **403 Forbidden**             | Authorization failed    | Insufficient permissions    |
+| **404 Not Found**             | Resource not found      | Agent/task doesn't exist    |
+| **409 Conflict**              | Resource conflict       | Duplicate agent name        |
+| **422 Unprocessable Entity**  | Validation error        | Invalid data format         |
+| **429 Too Many Requests**     | Rate limit exceeded     | API rate limiting           |
+| **500 Internal Server Error** | Server error            | Unexpected server error     |
 
 ---
 
@@ -622,29 +613,34 @@ sequenceDiagram
 ### Security Layers
 
 #### 1. Transport Security
+
 - **HTTPS Enforcement**: TLS 1.3 in production
 - **HSTS Headers**: HTTP Strict Transport Security
 - **Certificate Pinning**: Mobile apps pin certificates
 
 #### 2. Authentication Security
+
 - **JWT Tokens**: Stateless authentication with RS256 signing
 - **Refresh Token Rotation**: Automatic rotation on refresh
 - **Token Expiration**: Short-lived access tokens (15 min)
 - **Secure Storage**: httpOnly cookies for web, keychain for mobile
 
 #### 3. Authorization Security
+
 - **Role-Based Access Control (RBAC)**: USER, ADMIN, SUPER_ADMIN
 - **Resource-Level Permissions**: Granular access control
 - **API Key Management**: Secure handling of LLM provider keys
 - **Rate Limiting**: Per-user and per-endpoint limits
 
 #### 4. Input Security
+
 - **Request Validation**: Comprehensive Pydantic validation
 - **SQL Injection Prevention**: Parameterized queries with SQLAlchemy
 - **XSS Prevention**: Output encoding and CSP headers
 - **CSRF Protection**: SameSite cookies and CSRF tokens
 
 #### 5. Data Security
+
 - **Password Hashing**: bcrypt with configurable rounds
 - **API Key Encryption**: AES-256 encryption for stored keys
 - **Database Encryption**: Encryption at rest for sensitive data
@@ -730,6 +726,7 @@ graph TB
 ### Environment Configuration
 
 #### Development Environment
+
 ```yaml
 # docker-compose.dev.yml
 version: '3.8'
@@ -764,6 +761,7 @@ services:
 ```
 
 #### Production Environment
+
 ```yaml
 # docker-compose.prod.yml
 version: '3.8'
@@ -771,8 +769,8 @@ services:
   nginx:
     image: nginx:alpine
     ports:
-      - "80:80"
-      - "443:443"
+      - '80:80'
+      - '443:443'
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
       - ./ssl:/etc/ssl
@@ -822,21 +820,22 @@ services:
 ### Implemented Patterns
 
 #### 1. Repository Pattern
+
 ```python
 # Abstract Repository Interface
 class IRepository(ABC):
     @abstractmethod
     async def create(self, entity: T) -> T:
         pass
-    
+
     @abstractmethod
     async def get_by_id(self, id: UUID) -> Optional[T]:
         pass
-    
+
     @abstractmethod
     async def update(self, entity: T) -> T:
         pass
-    
+
     @abstractmethod
     async def delete(self, id: UUID) -> bool:
         pass
@@ -845,7 +844,7 @@ class IRepository(ABC):
 class AgentRepository(IRepository[Agent]):
     def __init__(self, db: AsyncSession):
         self.db = db
-    
+
     async def create(self, agent: Agent) -> Agent:
         self.db.add(agent)
         await self.db.commit()
@@ -854,25 +853,26 @@ class AgentRepository(IRepository[Agent]):
 ```
 
 #### 2. Factory Pattern
+
 ```python
 # Service Factory
 class PlaygroundServiceFactory:
     @staticmethod
     async def create_service() -> IPlaygroundExecutionService:
         use_real = settings.USE_REAL_PLAYGROUND
-        
+
         if use_real:
             service = RealPlaygroundService()
             if await service.health_check():
                 return service
-        
+
         return MockPlaygroundService()
 
 # LLM Client Factory
 class LLMClientFactory:
     def create_client(self, config: Dict[str, Any]) -> BaseLLM:
         provider = config.get("provider", "mock")
-        
+
         if provider == "openai":
             return OpenAIClient(config)
         elif provider == "anthropic":
@@ -882,6 +882,7 @@ class LLMClientFactory:
 ```
 
 #### 3. Strategy Pattern
+
 ```python
 # Evaluation Strategy Interface
 class IEvaluationStrategy(ABC):
@@ -902,15 +903,16 @@ class EfficiencyStrategy(IEvaluationStrategy):
 ```
 
 #### 4. Observer Pattern
+
 ```python
 # Event System for Real-time Updates
 class EventPublisher:
     def __init__(self):
         self._observers = []
-    
+
     def subscribe(self, observer: IObserver):
         self._observers.append(observer)
-    
+
     async def notify(self, event: Event):
         for observer in self._observers:
             await observer.handle(event)
@@ -925,19 +927,20 @@ class WebSocketObserver(IObserver):
 ```
 
 #### 5. Dependency Injection
+
 ```python
 # Service Container
 class Container:
     def __init__(self):
         self._services = {}
         self._factories = {}
-    
+
     def register(self, interface: Type, implementation: Type):
         self._services[interface] = implementation
-    
+
     def register_factory(self, interface: Type, factory: Callable):
         self._factories[interface] = factory
-    
+
     def get(self, interface: Type):
         if interface in self._factories:
             return self._factories[interface]()
@@ -970,13 +973,13 @@ async def create_submission(
     submission = await submission_service.create_submission(
         db, submission_data, current_user.id
     )
-    
+
     # Process in background
     background_tasks.add_task(
         process_submission_async,
         submission.id
     )
-    
+
     return submission
 
 # Async Database Operations
@@ -1003,15 +1006,15 @@ async def get_user_submissions(
 class CacheService:
     def __init__(self, redis: Redis):
         self.redis = redis
-    
+
     async def get_leaderboard(self, task_id: UUID) -> Optional[List[Dict]]:
         cache_key = f"leaderboard:{task_id}"
         cached = await self.redis.get(cache_key)
-        
+
         if cached:
             return json.loads(cached)
         return None
-    
+
     async def set_leaderboard(
         self,
         task_id: UUID,
@@ -1032,13 +1035,13 @@ class LeaderboardService:
         cached = await self.cache.get_leaderboard(task_id)
         if cached:
             return cached
-        
+
         # Query database
         leaderboard = await self.repository.get_task_leaderboard(task_id)
-        
+
         # Cache result
         await self.cache.set_leaderboard(task_id, leaderboard)
-        
+
         return leaderboard
 ```
 
@@ -1070,10 +1073,10 @@ async def create_multiple_tasks(
     tasks = [Task(**task_data.dict()) for task_data in tasks_data]
     db.add_all(tasks)
     await db.commit()
-    
+
     for task in tasks:
         await db.refresh(task)
-    
+
     return tasks
 ```
 
@@ -1092,7 +1095,7 @@ logger = structlog.get_logger()
 # Request Logging Middleware
 async def logging_middleware(request: Request, call_next):
     start_time = time.time()
-    
+
     logger.info(
         "request_started",
         method=request.method,
@@ -1100,11 +1103,11 @@ async def logging_middleware(request: Request, call_next):
         client_ip=request.client.host,
         user_agent=request.headers.get("user-agent")
     )
-    
+
     response = await call_next(request)
-    
+
     process_time = time.time() - start_time
-    
+
     logger.info(
         "request_completed",
         method=request.method,
@@ -1112,7 +1115,7 @@ async def logging_middleware(request: Request, call_next):
         status_code=response.status_code,
         process_time=process_time
     )
-    
+
     return response
 
 # Business Logic Logging
@@ -1123,10 +1126,10 @@ async def execute_playground_run(self, run_input: PlaygroundRunInput):
         agent_name=run_input.agent_name,
         task_title=run_input.task_title
     )
-    
+
     try:
         result = await self._orchestrate_agent_execution(run_input)
-        
+
         logger.info(
             "playground_execution_completed",
             submission_id=run_input.submission_id,
@@ -1134,7 +1137,7 @@ async def execute_playground_run(self, run_input: PlaygroundRunInput):
             steps_taken=result.steps_taken,
             execution_time=result.total_time_seconds
         )
-        
+
         return result
     except Exception as e:
         logger.error(
@@ -1179,20 +1182,20 @@ ACTIVE_CONNECTIONS = Gauge(
 # Metrics Middleware
 async def metrics_middleware(request: Request, call_next):
     start_time = time.time()
-    
+
     response = await call_next(request)
-    
+
     REQUEST_COUNT.labels(
         method=request.method,
         endpoint=request.url.path,
         status=response.status_code
     ).inc()
-    
+
     REQUEST_DURATION.labels(
         method=request.method,
         endpoint=request.url.path
     ).observe(time.time() - start_time)
-    
+
     return response
 ```
 
@@ -1210,38 +1213,38 @@ class HealthCheckService:
         self.db = db
         self.redis = redis
         self.playground_factory = playground_factory
-    
+
     async def check_health(self) -> HealthStatus:
         checks = {
             "database": await self._check_database(),
             "redis": await self._check_redis(),
             "playground": await self._check_playground()
         }
-        
+
         overall_status = "healthy" if all(
             check["status"] == "healthy" for check in checks.values()
         ) else "unhealthy"
-        
+
         return HealthStatus(
             status=overall_status,
             checks=checks,
             timestamp=datetime.utcnow()
         )
-    
+
     async def _check_database(self) -> Dict[str, Any]:
         try:
             await self.db.execute(text("SELECT 1"))
             return {"status": "healthy", "response_time": "< 10ms"}
         except Exception as e:
             return {"status": "unhealthy", "error": str(e)}
-    
+
     async def _check_redis(self) -> Dict[str, Any]:
         try:
             await self.redis.ping()
             return {"status": "healthy", "response_time": "< 5ms"}
         except Exception as e:
             return {"status": "unhealthy", "error": str(e)}
-    
+
     async def _check_playground(self) -> Dict[str, Any]:
         try:
             service = await self.playground_factory.create_service()
@@ -1330,18 +1333,18 @@ spec:
   minReplicas: 2
   maxReplicas: 10
   metrics:
-  - type: Resource
-    resource:
-      name: cpu
-      target:
-        type: Utilization
-        averageUtilization: 70
-  - type: Resource
-    resource:
-      name: memory
-      target:
-        type: Utilization
-        averageUtilization: 80
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
 ```
 
 ### Database Scaling Strategy
@@ -1355,10 +1358,10 @@ class DatabaseRouter:
             create_async_engine(url) for url in replica_urls
         ]
         self.replica_index = 0
-    
+
     def get_write_session(self) -> AsyncSession:
         return AsyncSession(self.master_engine)
-    
+
     def get_read_session(self) -> AsyncSession:
         # Round-robin load balancing
         engine = self.replica_engines[self.replica_index]
@@ -1369,13 +1372,13 @@ class DatabaseRouter:
 class AgentRepository:
     def __init__(self, db_router: DatabaseRouter):
         self.db_router = db_router
-    
+
     async def create(self, agent: Agent) -> Agent:
         async with self.db_router.get_write_session() as session:
             session.add(agent)
             await session.commit()
             return agent
-    
+
     async def get_by_id(self, agent_id: UUID) -> Optional[Agent]:
         async with self.db_router.get_read_session() as session:
             result = await session.execute(
@@ -1442,13 +1445,13 @@ from uuid import UUID
 async def get_agent(agent_id: UUID) -> Optional[Agent]:
     """
     Retrieve an agent by ID.
-    
+
     Args:
         agent_id: The unique identifier for the agent
-        
+
     Returns:
         The agent if found, None otherwise
-        
+
     Raises:
         DatabaseException: If database query fails
     """
@@ -1465,7 +1468,7 @@ class AgentCreate(BaseModel):
     name: str = Field(..., min_length=1, max_length=100)
     agent_type: str = Field(..., regex="^(gpt-4|gpt-3.5|claude-3)$")
     configuration: Dict[str, Any] = Field(default_factory=dict)
-    
+
     class Config:
         schema_extra = {
             "example": {
@@ -1507,11 +1510,11 @@ async def create_agent(self, agent_data: AgentCreate) -> Agent:
                 "Agent name already exists",
                 error_code="DUPLICATE_NAME"
             )
-        
+
         # Create agent
         agent = Agent(**agent_data.dict())
         return await self.repository.create(agent)
-        
+
     except ValidationException:
         raise  # Re-raise validation errors
     except Exception as e:
@@ -1532,7 +1535,7 @@ from unittest.mock import AsyncMock
 
 class TestAgentController:
     """Test suite for Agent Controller"""
-    
+
     @pytest.fixture
     async def mock_agent_service(self):
         service = AsyncMock()
@@ -1542,7 +1545,7 @@ class TestAgentController:
             agent_type="gpt-4"
         )
         return service
-    
+
     async def test_create_agent_success(
         self,
         client: AsyncClient,
@@ -1556,21 +1559,21 @@ class TestAgentController:
             "agent_type": "gpt-4",
             "configuration": {}
         }
-        
+
         # Act
         response = await client.post(
             "/api/v1/agents",
             json=agent_data,
             headers=auth_headers
         )
-        
+
         # Assert
         assert response.status_code == 201
         data = response.json()
         assert data["name"] == "Test Agent"
         assert data["agent_type"] == "gpt-4"
         mock_agent_service.create_agent.assert_called_once()
-    
+
     async def test_create_agent_validation_error(
         self,
         client: AsyncClient,
@@ -1582,14 +1585,14 @@ class TestAgentController:
             "name": "",  # Invalid: empty name
             "agent_type": "invalid-type"  # Invalid: unsupported type
         }
-        
+
         # Act
         response = await client.post(
             "/api/v1/agents",
             json=invalid_data,
             headers=auth_headers
         )
-        
+
         # Assert
         assert response.status_code == 422
         errors = response.json()["detail"]
@@ -1611,6 +1614,7 @@ AgentArena's architecture represents a modern, scalable, and maintainable approa
 - **Industry-standard patterns** for maintainability and extensibility
 
 This architecture provides a solid foundation for:
+
 - ✅ **High-performance agent evaluations**
 - ✅ **Scalable multi-tenant operations**
 - ✅ **Secure API key management**
@@ -1622,5 +1626,3 @@ This architecture provides a solid foundation for:
 The modular design ensures that individual components can be updated, replaced, or scaled independently, making AgentArena ready for production use and future enhancements.
 
 ---
-
-**For technical questions or contributions, see [README.md](README.md) and [CONTRIBUTING.md](CONTRIBUTING.md)**

@@ -22,9 +22,6 @@
 - [API Documentation](#api-documentation)
 - [Development](#development)
 - [Deployment](#deployment)
-- [Contributing](#contributing)
-- [License](#license)
-- [Support](#support)
 
 ---
 
@@ -474,39 +471,3 @@ npm run format
 - Secure API key handling
 
 ---
-
-## 🤝 Contributing
-
-We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
-
-### Development Setup
-
-1. Fork the repository
-2. Clone your fork: `git clone https://github.com/yourusername/agentarena.git`
-3. Install dependencies (see Installation section)
-4. Create a branch: `git checkout -b feature/your-feature`
-5. Make changes and test
-6. Submit a pull request
-
-### Reporting Issues
-
-Please use the [GitHub Issues](https://github.com/yourusername/agentarena/issues) to report bugs or request features.
-
-## 🆘 Support
-
-- **Documentation**: [ARCHITECTURE.md](ARCHITECTURE.md)
-- **API Docs**: http://localhost:8000/docs
-- **Issues**: [GitHub Issues](https://github.com/yourusername/agentarena/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/yourusername/agentarena/discussions)
-
----
-
-## 🙏 Acknowledgments
-
-- Inspired by [WebArena](https://webarena.dev/) for realistic web agent evaluation
-- Built with modern web technologies and industry best practices
-- Thanks to all contributors and the open-source community
-
----
-
-**Made with ❤️ for the AI research community**
