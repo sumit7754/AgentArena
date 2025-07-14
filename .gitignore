@@ -1,0 +1,117 @@
+# General
+.DS_Store
+*.log
+.env
+.env.local
+.env.production
+.env.development
+.vscode/
+.idea/
+*.pyc
+__pycache__/
+node_modules/
+dist/
+build/
+coverage/
+*.swp
+*.swo
+
+# FastAPI Backend
+venv/
+env/
+instance/
+*.sqlite3
+migrations/
+alembic/
+*.db
+db.sqlite3
+*.pyc
+*.pyo
+__pycache__/
+logs/
+secrets.json
+
+# Prisma ORM (PostgreSQL)
+prisma/migrations/
+prisma/dev.db
+prisma/generated/
+prisma/.env
+
+# React Frontend
+node_modules/
+build/
+dist/
+.npm/
+.yarn/
+.yarnrc
+.next/
+out/
+.cache/
+*.lock
+public/build/
+coverage/
+*.env
+*.env.local
+!.env.example
+.package-lock.json
+
+# IDE and Editor Config
+.vscode/
+.idea/
+*.iml
+*.sublime-workspace
+*.sublime-project
+
+# OS-Specific
+Thumbs.db
+*.DS_Store
+
+# Scripts and Sample Data (Excluded for production)
+create_more_tasks.py
+create_task.py
+populate_tasks.py
+sample_agents.json
+start_platform.sh
+
+# Development and Build Tools
+*.egg-info/
+.tox/
+.pytest_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+.nox/
+.venv/
+
+# Temporary Files
+*.tmp
+*.temp
+*.bak
+*.backup
+
+# Database Files
+*.sqlite
+*.sqlite3
+*.db
+
+# Logs and Runtime Files
+*.log
+logs/
+*.pid
+
+# Configuration Files (Keep examples)
+!.env.example
+!config.example.json
+
+# Documentation (Keep these)
+
+!CONTRIBUTING.md
+!LICENSE
+!CHANGELOG.md
+
+# Docker files (Keep these)
+!docker-compose.yml
+!docker-compose.dev.yml
+!docker-compose.prod.yml
+!Dockerfile
+!.dockerignore
