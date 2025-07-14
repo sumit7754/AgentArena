@@ -314,15 +314,15 @@ sequenceDiagram
             break
         end
 
-        RealPG->>Client: progress_update (WebSocket)
+        RealPG->>Client: progress_update (via WebSocket)
     end
 
     RealPG->>Browser: close()
     RealPG->>Agent: reset()
     RealPG-->>Service: PlaygroundRunOutput
     Service-->>Controller: SubmissionResponse
-    Controller-->>API: JSON Response
-    API-->>Client: HTTP 201 Created
+    Controller-->>API: JSON response
+    API-->>Client: Created (201)
 ```
 
 ---
@@ -453,11 +453,11 @@ graph TB
     end
 
     subgraph "Route Handlers"
-        AuthRoutes[/api/v1/auth/*]
-        AgentRoutes[/api/v1/agents/*]
-        TaskRoutes[/api/v1/tasks/*]
-        SubmissionRoutes[/api/v1/submissions/*]
-        AdminRoutes[/api/v1/admin/*]
+        AuthRoutes["/api/v1/auth/*"]
+        AgentRoutes["/api/v1/agents/*"]
+        TaskRoutes["/api/v1/tasks/*"]
+        SubmissionRoutes["/api/v1/submissions/*"]
+        AdminRoutes["/api/v1/admin/*"]
     end
 
     subgraph "Middleware Stack"
